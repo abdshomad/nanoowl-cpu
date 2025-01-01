@@ -144,13 +144,17 @@ class OwlPredictor(torch.nn.Module):
     
     def __init__(self,
             model_name: str = "google/owlvit-base-patch32",
-            device: str = "cuda",
+            # device: str = "cuda",
+            device: Optional[str] = None, # Optional parameter, will default if not set by user
             image_encoder_engine: Optional[str] = None,
             image_encoder_engine_max_batch_size: int = 1,
             image_preprocessor: Optional[ImagePreprocessor] = None
         ):
 
         super().__init__()
+        # Check if the user has specified the device. Otherwise autodetect cuda
+        device = "cuda" if device is None and torch.cuda.is_available() else "cpu"
+        self.device = device
 
         self.image_size = _owl_get_image_size(model_name)
         self.device = device
@@ -163,7 +167,8 @@ class OwlPredictor(torch.nn.Module):
         self.mesh_grid = torch.stack(
             torch.meshgrid(
                 torch.linspace(0., 1., self.image_size),
-                torch.linspace(0., 1., self.image_size)
+                torch.linspace(0., 1., self.image_size), 
+                indexing = "ij"
             )
         ).to(self.device).float()
         self.image_encoder_engine = None

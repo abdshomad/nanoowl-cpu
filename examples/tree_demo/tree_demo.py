@@ -34,11 +34,12 @@ from nanoowl.owl_predictor import OwlPredictor
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("image_encode_engine", type=str)
+    parser.add_argument("--image_encode_engine", type=str, default=None)
     parser.add_argument("--image_quality", type=int, default=50)
     parser.add_argument("--port", type=int, default=7860)
     parser.add_argument("--host", type=str, default="0.0.0.0")
     parser.add_argument("--camera", type=int, default=0)
+    parser.add_argument("--device", type=str, default=None)
     args = parser.parse_args()
 
     CAMERA_DEVICE = args.camera
@@ -46,7 +47,8 @@ if __name__ == "__main__":
 
     predictor = TreePredictor(
         owl_predictor=OwlPredictor(
-            image_encoder_engine=args.image_encode_engine
+            image_encoder_engine=args.image_encode_engine,
+            model_name = "google/owlvit-base-patch32"
         )
     )
 

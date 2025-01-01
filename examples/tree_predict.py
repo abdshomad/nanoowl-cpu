@@ -33,13 +33,16 @@ if __name__ == "__main__":
     parser.add_argument("--threshold", type=float, default=0.1)
     parser.add_argument("--output", type=str, default="../data/tree_predict_out.jpg")
     parser.add_argument("--model", type=str, default="google/owlvit-base-patch32")
-    parser.add_argument("--image_encoder_engine", type=str, default="../data/owl_image_encoder_patch32.engine")
+    # parser.add_argument("--image_encoder_engine", type=str, default="../data/owl_image_encoder_patch32.engine")
+    parser.add_argument("--image_encoder_engine", type=str, default=None)
+    parser.add_argument("--device", type=str, default=None)
     args = parser.parse_args()
 
     predictor = TreePredictor(
         owl_predictor=OwlPredictor(
             args.model,
-            image_encoder_engine=args.image_encoder_engine
+            image_encoder_engine=args.image_encoder_engine,
+            device = args.device
         )
     )
 
@@ -58,4 +61,7 @@ if __name__ == "__main__":
 
     image = draw_tree_output(image, output, tree=tree, draw_text=True)
 
+    print(f'Output image: {args.output}')
+    image = image.convert("RGB")
     image.save(args.output)
+    # image.show()

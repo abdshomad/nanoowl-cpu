@@ -57,17 +57,21 @@ class ClipPredictor(torch.nn.Module):
     def __init__(self,
             model_name: str = "ViT-B/32",
             image_size: Tuple[int, int] = (224, 224),
-            device: str = "cuda",
+            # device: str = "cuda",
+            device: Optional[str] = None,
             image_preprocessor: Optional[ImagePreprocessor] = None
         ):
         super().__init__()
+        
+        device = "cuda" if device is None and torch.cuda.is_available() else "cpu" if device is None else device
         self.device = device
         self.clip_model, _ = clip.load(model_name, device)
         self.image_size = image_size
         self.mesh_grid = torch.stack(
             torch.meshgrid(
                 torch.linspace(0., 1., self.image_size[1]),
-                torch.linspace(0., 1., self.image_size[0])
+                torch.linspace(0., 1., self.image_size[0]), 
+                indexing = "ij"
             )
         ).to(self.device).float()
         self.image_preprocessor = image_preprocessor.to(self.device).eval() if image_preprocessor else ImagePreprocessor().to(self.device).eval()

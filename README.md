@@ -1,4 +1,6 @@
-<h1 align="center">NanoOWL</h1>
+<h1 align="center">NanoOWL (Running on CPU, GPU and Google Colab)</h1>
+
+How to run on CPU, GPU and Google Colab: [README-CPU.md](README-CPU.md)
 
 <p align="center"><a href="#usage"/>👍 Usage</a> - <a href="#performance"/>⏱️ Performance</a> - <a href="#setup">🛠️ Setup</a> - <a href="#examples">🤸 Examples</a> <br> - <a href="#acknowledgement">👏 Acknowledgment</a> - <a href="#see-also">🔗 See also</a></p>
 

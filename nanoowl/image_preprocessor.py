@@ -68,8 +68,16 @@ class ImagePreprocessor(torch.nn.Module):
     
     @torch.no_grad()
     def preprocess_pil_image(self, image: PIL.Image.Image):
-        image = torch.from_numpy(np.asarray(image))
+        image = torch.from_numpy(np.asarray(image).copy())  # ADD copy() HERE to suppress warning 
         image = image.permute(2, 0, 1)[None, ...]
+
+        # Transform non 3-channel images to 3 channel (RGB) (handle PNG file)
+        if image.shape[1] == 4:
+            image = image[:, :3, :, :] # drop alpha
+
+        elif image.shape[1] == 1: #Handle grayscale or 1-channel input data
+            image = image.repeat(1, 3, 1, 1) #convert 1 channel grayscale to 3 channel
+
         image = image.to(self.mean.device)
         image = image.type(self.mean.dtype)
         return self.forward(image, inplace=True)

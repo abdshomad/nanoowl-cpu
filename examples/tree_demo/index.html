@@ -39,7 +39,7 @@
         #logo {
             height: 128px;
         }
-        
+
         #prompt_input {
             width: 100%;
             font-size: 24px;
@@ -62,10 +62,10 @@
         }
 
         var ws = undefined
-        
+
         console.log(location.host);
 
-        ws = new WebSocket("ws://" + location.host + "/ws");
+        ws = new WebSocket("wss://" + location.host + "/ws");
 
         ws.onopen = function () {
 
@@ -104,9 +104,10 @@
 <body>
     <div id="main_container">
         <h1>NanoOWL</h1>
+        <p>NOTE: Please wait for detection model to be loaded</p>
         <img id="camera_image" src="" alt="Camera Image"/>
         <br/>
-        <input id="prompt_input" type="text" placeholder="[a face [an eye, a nose]]"/>
+        <input id="prompt_input" type="text" value="[an owl (flying, perched) [an eye, a claw, a beak], a face [an eye, a nose], a mouse]" placeholder="[an owl (flying, perched) [an eye, a claw, a beak]]"/>
     </div>
 </body>
 </html>

@@ -45,9 +45,13 @@ class TreePredictor(torch.nn.Module):
             owl_predictor: Optional[OwlPredictor] = None,
             clip_predictor: Optional[ClipPredictor] = None,
             image_preprocessor: Optional[ImagePreprocessor] = None,
-            device: str = "cuda"
+            # device: str = "cuda"
+            device: Optional[str] = None, # Optional parameter, will default if not set by user
         ):
         super().__init__()
+        # Check if the user has specified the device. Otherwise autodetect cuda
+        device = "cuda" if device is None and torch.cuda.is_available() else "cpu"
+        self.device = device
         self.owl_predictor = OwlPredictor() if owl_predictor is None else owl_predictor
         self.clip_predictor = ClipPredictor() if clip_predictor is None else clip_predictor
         self.image_preprocessor = ImagePreprocessor().to(device).eval() if image_preprocessor is None else image_preprocessor

@@ -18,6 +18,7 @@ import argparse
 import PIL.Image
 import time
 import torch
+
 from nanoowl.owl_predictor import (
     OwlPredictor
 )
@@ -34,9 +35,12 @@ if __name__ == "__main__":
     parser.add_argument("--threshold", type=str, default="0.1,0.1")
     parser.add_argument("--output", type=str, default="../data/owl_predict_out.jpg")
     parser.add_argument("--model", type=str, default="google/owlvit-base-patch32")
-    parser.add_argument("--image_encoder_engine", type=str, default="../data/owl_image_encoder_patch32.engine")
+    # parser.add_argument("--image_encoder_engine", type=str, default="../data/owl_image_encoder_patch32.engine")
+    parser.add_argument("--image_encoder_engine", type=str, default=None)
     parser.add_argument("--profile", action="store_true")
     parser.add_argument("--num_profiling_runs", type=int, default=30)
+    parser.add_argument("--device", type=str, default=None)
+
     args = parser.parse_args()
 
     prompt = args.prompt.strip("][()")
@@ -54,7 +58,8 @@ if __name__ == "__main__":
 
     predictor = OwlPredictor(
         args.model,
-        image_encoder_engine=args.image_encoder_engine
+        image_encoder_engine=args.image_encoder_engine,
+        device = args.device 
     )
 
     image = PIL.Image.open(args.image)
@@ -87,4 +92,7 @@ if __name__ == "__main__":
 
     image = draw_owl_output(image, output, text=text, draw_text=True)
 
+    print(f'Output image: {args.output}')
+    image = image.convert("RGB")
     image.save(args.output)
+    # image.show()

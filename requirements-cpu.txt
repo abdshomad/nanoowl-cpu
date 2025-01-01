@@ -1,0 +1,8 @@
+torch
+torchvision
+torchaudio
+transformers
+opencv-python
+matplotlib
+git+https://github.com/openai/CLIP.git
+aiohttp
